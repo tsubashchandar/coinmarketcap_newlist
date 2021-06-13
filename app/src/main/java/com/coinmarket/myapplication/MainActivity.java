@@ -18,7 +18,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.PersistableBundle;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -49,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView timerText;
     private EditText timeValue, apiKey;
     private Switch timerSwitch;
+    private ImageView setting;
 
     private int setTime;
     private boolean isSwitchEnabled;
@@ -59,17 +59,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.e("sii", "nnn");
         setContentView(R.layout.activity_main);
         search = (Button) findViewById(R.id.search);
         search.setOnClickListener(this);
-        addKey = (Button) findViewById(R.id.addKey);
+/*        addKey = (Button) findViewById(R.id.addKey);
         addKey.setOnClickListener(this);
-        apiKey = (EditText) findViewById(R.id.key);
+        apiKey = (EditText) findViewById(R.id.key);*/
         spin = (ProgressBar) findViewById(R.id.progressBar);
         timerText = (TextView) findViewById(R.id.timerText);
         timeValue = (EditText) findViewById(R.id.timeValue);
         timerSwitch = (Switch) findViewById(R.id.timerswitch);
+        setting = (ImageView)findViewById(R.id.setting);
+        setting.setOnClickListener(this);
         timerSwitch.setOnCheckedChangeListener(this);
         net = new Network(this);
         loadKey();
@@ -81,6 +82,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Log.e("hhhh", "loadsave");
             setTime = savedInstanceState.getInt(SET_TIME);
             isSwitchEnabled = savedInstanceState.getBoolean(IS_SWITCH_ENABLED);
+        }
+        else
+        {
+            Log.e("subash ", " oncreate savestate null" );
         }
     }
 
@@ -97,14 +102,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onSaveInstanceState(outState);
     }
 
+
     @Override
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
         if (savedInstanceState != null) {
             Log.e("onrestore", "loadsave");
             setTime = savedInstanceState.getInt(SET_TIME);
             isSwitchEnabled = savedInstanceState.getBoolean(IS_SWITCH_ENABLED);
         }
+        else
+        {
+            Log.e("onrestore", " null");
+        }
+        super.onRestoreInstanceState(savedInstanceState);
+
     }
 
     @Override
@@ -120,24 +131,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (v == search) {
             postReq();
         }
-        if (v == addKey) {
-            String btnStr = addKey.getText().toString();
-
-            if (btnStr.compareTo("Key") == 0) {
-                Log.e("subash", "button key");
-                apiKey.setVisibility(View.VISIBLE);
-                addKey.setText("Save");
-
-            } else {
-                if (Network.keySet.contains(apiKey.getText().toString())) {
-                    saveKey(apiKey.getText().toString());
-                    Toast.makeText(this, "API Key added successfully", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(this, "Add valid API Key", Toast.LENGTH_SHORT).show();
-                }
-                addKey.setText("Key");
-                apiKey.setVisibility(View.INVISIBLE);
-            }
+        if(v == setting)
+        {
+            Intent intent = new Intent(this, Settings.class);
+            startActivity(intent);
         }
     }
 
@@ -157,6 +154,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onResponse() {
+        Log.e("subash","asdasdasda");
         if (spin.isShown()) {
             spin.setVisibility(View.INVISIBLE);
         }
@@ -268,5 +266,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(
                 Network.API_KEY_SHARED_PREFERENCE, Context.MODE_PRIVATE);
         Network.Key = sharedPref.getString(Network.API_KEY_SHARED_PREFERENCE, "defaultValue");
+    }
+
+    public static void copyToClipboard(String address, Context context)
+    {
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.HONEYCOMB) {
+            android.text.ClipboardManager clipboard = (android.text.ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+            clipboard.setText(address);
+        } else {
+            android.content.ClipboardManager clipboard = (android.content.ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+            android.content.ClipData clip = android.content.ClipData.newPlainText("Copied Text", address);
+            clipboard.setPrimaryClip(clip);
+        }
+        Toast.makeText(context, "Copied address " + address, Toast.LENGTH_SHORT).show();
+
     }
 }

@@ -80,15 +80,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
 
         @Override
         public void onClick(View v) {
-            if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.HONEYCOMB) {
-                android.text.ClipboardManager clipboard = (android.text.ClipboardManager) v.getContext().getSystemService(Context.CLIPBOARD_SERVICE);
-                clipboard.setText(this.address.getText());
-            } else {
-                android.content.ClipboardManager clipboard = (android.content.ClipboardManager) v.getContext().getSystemService(Context.CLIPBOARD_SERVICE);
-                android.content.ClipData clip = android.content.ClipData.newPlainText("Copied Text", this.address.getText());
-                clipboard.setPrimaryClip(clip);
-            }
-            Toast.makeText(v.getContext(), "Copied address of " + this.name.getText(), Toast.LENGTH_SHORT).show();
+            MainActivity.copyToClipboard(this.address.getText().toString(), v.getContext());
         }
 
     }

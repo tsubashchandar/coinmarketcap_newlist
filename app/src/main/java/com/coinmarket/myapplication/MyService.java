@@ -135,7 +135,7 @@ public class MyService extends Service {
             String newCoinPlatform = arg1.getExtras().getString(Network.LAST_COIN_PLATFORM_KEY);
             cdt.start();
             if ((lastCoin != "") && (lastCoin.compareTo(newCoin) != 0)) {
-                if (newCoinPlatform.compareTo("BNB") == 0 || newCoinPlatform.compareTo("error") == 0) {
+                if (newCoinPlatform.equals("BNB") || newCoinPlatform.equals("error")) {
                     notifyNewToken();
                 }
             }
@@ -151,28 +151,30 @@ public class MyService extends Service {
 
     private void notifyNewToken() {
 
-          /*  mp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                @Override
-                public void onPrepared(MediaPlayer mp) {
-                    mp.start();
-                }
-            });
-            mp.prepareAsync();*/
         mp.start();
         showAlertDialog();
     }
 
     private void showAlertDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+        CharSequence msgList[] = new CharSequence[]{"Token : " + Network.dataSet.get(0).name , "Symbol : " + Network.dataSet.get(0).symbol ,
+                                                    "Price : " + Network.dataSet.get(0).price }   ;
         builder.setTitle("Token Check");
-        builder.setMessage("Token : " + Network.dataSet.get(0).name);
+        builder.setItems(msgList, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                MainActivity.copyToClipboard(Network.dataSet.get(0).address,getApplicationContext());
+            }
+        });
+        builder.setIcon(R.mipmap.ic_launcher_round);
         builder.setPositiveButton(
                 "Buy",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                        Intent intent = getPackageManager().
                                 getLaunchIntentForPackage("com.coinmarket.myapplication");
-                     //  intent.
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                        MainActivity.copyToClipboard(Network.dataSet.get(0).address, getApplicationContext());
                         startActivity(intent);
                         dialog.dismiss();
                     }
@@ -196,8 +198,10 @@ public class MyService extends Service {
         alert.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface arg0) {
-                if (mp.isPlaying())
+                if (mp.isPlaying()) {
                     mp.stop();
+                    mp.prepareAsync();
+                }
             }
         });
 
@@ -205,8 +209,10 @@ public class MyService extends Service {
 
             @Override
             public void onCancel(DialogInterface dialog) {
-                if (mp.isPlaying())
+                if (mp.isPlaying()) {
                     mp.stop();
+                    mp.prepareAsync();
+                }
             }
         });
     }
