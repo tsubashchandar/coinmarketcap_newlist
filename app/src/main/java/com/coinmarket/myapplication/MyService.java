@@ -139,6 +139,8 @@ public class MyService extends Service {
                     notifyNewToken();
                 }
             }
+            // for Test
+            //notifyNewToken();
             lastCoin = newCoin;
             Log.e("subash", "Received broadcast " + newCoin + lastCoin);
         }
@@ -186,6 +188,18 @@ public class MyService extends Service {
                         dialog.dismiss();
                     }
                 });
+
+        builder.setNeutralButton("PooCoin", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                Intent intent = getPackageManager().
+                        getLaunchIntentForPackage("com.wallet.crypto.trustapp");
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                String pooCoinTokChart = "https://poocoin.app/tokens/"+Network.dataSet.get(0).address;
+                MainActivity.copyToClipboard(pooCoinTokChart, getApplicationContext());
+                startActivity(intent);
+                dialog.dismiss();
+            }
+        });
 
         alert = builder.create();
         alert.getWindow().setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);

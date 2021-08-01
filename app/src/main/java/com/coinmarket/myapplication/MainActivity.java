@@ -14,6 +14,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
+import android.media.RingtoneManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -43,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public ProgressBar spin;
     public static RecyclerView recyclerView;
     Network net;
+    private MediaPlayer mp;
 
     private Button search, addKey;
     private TextView timerText;
@@ -62,14 +65,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         search = (Button) findViewById(R.id.search);
         search.setOnClickListener(this);
-/*        addKey = (Button) findViewById(R.id.addKey);
-        addKey.setOnClickListener(this);
-        apiKey = (EditText) findViewById(R.id.key);*/
+
         spin = (ProgressBar) findViewById(R.id.progressBar);
         timerText = (TextView) findViewById(R.id.timerText);
         timeValue = (EditText) findViewById(R.id.timeValue);
         timerSwitch = (Switch) findViewById(R.id.timerswitch);
-        setting = (ImageView)findViewById(R.id.setting);
+        setting = (ImageView) findViewById(R.id.setting);
+
+        mp = MediaPlayer.create(this, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
         setting.setOnClickListener(this);
         timerSwitch.setOnCheckedChangeListener(this);
         net = new Network(this);
@@ -82,10 +85,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Log.e("hhhh", "loadsave");
             setTime = savedInstanceState.getInt(SET_TIME);
             isSwitchEnabled = savedInstanceState.getBoolean(IS_SWITCH_ENABLED);
-        }
-        else
-        {
-            Log.e("subash ", " oncreate savestate null" );
+        } else {
+            Log.e("subash ", " oncreate savestate null");
         }
     }
 
@@ -109,9 +110,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Log.e("onrestore", "loadsave");
             setTime = savedInstanceState.getInt(SET_TIME);
             isSwitchEnabled = savedInstanceState.getBoolean(IS_SWITCH_ENABLED);
-        }
-        else
-        {
+        } else {
             Log.e("onrestore", " null");
         }
         super.onRestoreInstanceState(savedInstanceState);
@@ -131,8 +130,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (v == search) {
             postReq();
         }
-        if(v == setting)
-        {
+        if (v == setting) {
             Intent intent = new Intent(this, Settings.class);
             startActivity(intent);
         }
@@ -154,7 +152,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onResponse() {
-        Log.e("subash","asdasdasda");
+        Log.e("subash", "asdasdasda");
         if (spin.isShown()) {
             spin.setVisibility(View.INVISIBLE);
         }
@@ -250,8 +248,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     };
 
-    private void saveKey(String key)
-    {
+    private void saveKey(String key) {
         Context context = this.getBaseContext();
         SharedPreferences sharedPref = context.getSharedPreferences(
                 Network.API_KEY_SHARED_PREFERENCE, Context.MODE_PRIVATE);
@@ -261,15 +258,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Network.Key = key;
     }
 
-    private void loadKey()
-    {
+    private void loadKey() {
         SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(
                 Network.API_KEY_SHARED_PREFERENCE, Context.MODE_PRIVATE);
         Network.Key = sharedPref.getString(Network.API_KEY_SHARED_PREFERENCE, "defaultValue");
     }
 
-    public static void copyToClipboard(String address, Context context)
-    {
+    public static void copyToClipboard(String address, Context context) {
         if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.HONEYCOMB) {
             android.text.ClipboardManager clipboard = (android.text.ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
             clipboard.setText(address);

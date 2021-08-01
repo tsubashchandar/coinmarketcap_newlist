@@ -25,7 +25,7 @@ import java.util.Map;
 
 public class Network {
 
-    String token_url = "https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?start=1&limit=3&convert=USD&sort=date_added&sort_dir=asc";
+    String token_url = "https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?start=1&limit=3&convert=USD&sort=date_added&sort_dir=desc";
     String key_url = "https://pro-api.coinmarketcap.com/v1/key/info";
     private RequestQueue queue;
     static ArrayList<DataModel> dataSet = null;
@@ -131,7 +131,7 @@ public class Network {
                     params.put("limit", "1");
                     params.put("convert", "USD");
                     params.put("sort", "date_added");
-                    params.put("sort_dir", "asc");
+                    params.put("sort_dir", "desc");
                 }
                 return params;
             }

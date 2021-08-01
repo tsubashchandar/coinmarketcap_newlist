@@ -58,7 +58,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         return dataSet.size();
     }
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         TextView name;
         TextView symbol;
         TextView platform;
@@ -75,6 +75,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
             this.address = (TextView) itemView.findViewById(R.id.address);
             this.copy = (ImageView) itemView.findViewById(R.id.copy);
             copy.setOnClickListener(this);
+            copy.setOnLongClickListener(this);
 
         }
 
@@ -83,6 +84,12 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
             MainActivity.copyToClipboard(this.address.getText().toString(), v.getContext());
         }
 
+        @Override
+        public boolean onLongClick(View v) {
+            String pooCoinTokChart = "https://poocoin.app/tokens/"+this.address.getText().toString();
+            MainActivity.copyToClipboard(pooCoinTokChart, v.getContext());
+            return true;
+        }
     }
 
     public CustomAdapter(ArrayList<DataModel> dataSet) {
