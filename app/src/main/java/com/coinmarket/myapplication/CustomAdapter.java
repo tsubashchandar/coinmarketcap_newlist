@@ -23,6 +23,7 @@ import java.util.ArrayList;
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHolder> {
     private ArrayList<DataModel> dataSet;
 
+
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -65,6 +66,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         TextView price;
         TextView address;
         ImageView copy;
+        ImageView link;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -74,21 +76,32 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
             this.price = (TextView) itemView.findViewById(R.id.price);
             this.address = (TextView) itemView.findViewById(R.id.address);
             this.copy = (ImageView) itemView.findViewById(R.id.copy);
+            this.link = (ImageView) itemView.findViewById(R.id.link);
             copy.setOnClickListener(this);
             copy.setOnLongClickListener(this);
+            link.setOnClickListener(this);
 
         }
 
         @Override
         public void onClick(View v) {
-            MainActivity.copyToClipboard(this.address.getText().toString(), v.getContext());
+            if(v == this.copy)
+                MainActivity.copyToClipboard(this.address.getText().toString(), v.getContext());
+            else if(v == this.link)
+            {
+                LinksDialog linksDialog = new LinksDialog(this, v.getContext());
+                linksDialog.show();
+            }
         }
 
         @Override
         public boolean onLongClick(View v) {
-            String pooCoinTokChart = "https://poocoin.app/tokens/"+this.address.getText().toString();
-            MainActivity.copyToClipboard(pooCoinTokChart, v.getContext());
-            return true;
+            if(v == this.copy) {
+                String pooCoinTokChart = "https://poocoin.app/tokens/" + this.address.getText().toString();
+                MainActivity.copyToClipboard(pooCoinTokChart, v.getContext());
+                return true;
+            }
+            return false;
         }
     }
 

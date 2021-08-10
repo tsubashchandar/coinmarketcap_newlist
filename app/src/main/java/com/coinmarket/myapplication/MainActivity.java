@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private EditText timeValue, apiKey;
     private Switch timerSwitch;
     private ImageView setting;
+    private ImageView webLink;
 
     private int setTime;
     private boolean isSwitchEnabled;
@@ -71,9 +72,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         timeValue = (EditText) findViewById(R.id.timeValue);
         timerSwitch = (Switch) findViewById(R.id.timerswitch);
         setting = (ImageView) findViewById(R.id.setting);
+        webLink = (ImageView) findViewById(R.id.weblink);
 
         mp = MediaPlayer.create(this, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
         setting.setOnClickListener(this);
+        webLink.setOnClickListener(this);
         timerSwitch.setOnCheckedChangeListener(this);
         net = new Network(this);
         loadKey();
@@ -130,9 +133,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (v == search) {
             postReq();
         }
-        if (v == setting) {
+        else if (v == setting) {
             Intent intent = new Intent(this, Settings.class);
             startActivity(intent);
+        }
+        else if(v == webLink){
+            WebLinksDialog webLinksDialog = new WebLinksDialog(v.getContext());
+            webLinksDialog.show();
         }
     }
 
@@ -162,6 +169,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void setAdapter() {
         adapter = new CustomAdapter(net.getDataSet());
         recyclerView.setAdapter(adapter);
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)

@@ -9,8 +9,7 @@ public class DataModel {
     String price;
 
 
-    public DataModel(String name , String symbol, String platform, String address, String price)
-    {
+    public DataModel(String name, String symbol, String platform, String address, String price) {
         this.name = name;
         this.symbol = symbol;
         this.platform = platform;
@@ -18,22 +17,23 @@ public class DataModel {
         this.price = price;
     }
 
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
-    public String getSymbol()
-    {
+
+    public String getSymbol() {
         return symbol;
     }
-    public String getPlatform()
-    {
+
+    public String getPlatform() {
         return platform;
     }
-    public String getAddress()
-    {return address;}
-    public String getPrice()
-    {
+
+    public String getAddress() {
+        return address;
+    }
+
+    public String getPrice() {
         return price;
     }
 

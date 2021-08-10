@@ -94,16 +94,20 @@
 
             <TextView
                 android:id="@+id/address"
-                android:layout_width="wrap_content"
+                android:layout_width="240dp"
                 android:layout_height="wrap_content"
+                android:paddingRight="5dp"
+                android:layout_marginRight="10dp"
                 android:layout_marginStart="24dp"
                 android:layout_marginLeft="24dp"
                 android:layout_marginBottom="13dp"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:text="TextView"
                 android:textSize="12dp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/copy"
+                app:layout_constraintEnd_toStartOf="@+id/link"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent" />
 //android:background="@drawable/back"
@@ -119,6 +123,18 @@
                 app:layout_constraintTop_toBottomOf="@+id/platform"
                 app:layout_constraintVertical_bias="0.5"
                 app:srcCompat="@drawable/copy_elect" />
+
+            <ImageView
+                android:id="@+id/link"
+                android:layout_width="50dp"
+                android:layout_height="45dp"
+                android:layout_marginEnd="12dp"
+                android:layout_marginRight="12dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/copy"
+                app:layout_constraintTop_toBottomOf="@+id/platform"
+                app:layout_constraintVertical_bias="0.0"
+                app:srcCompat="@drawable/ext_link_select" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
